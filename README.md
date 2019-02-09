@@ -42,7 +42,7 @@ If you like to continue with existing price enter `continue`
 >>> continue
 ```
 
-It will ask you to enter product codes in serial i.e `ACDDC`
+It will ask you to enter product codes in serial i.e `ABCDABAA`
 
 ```bash
 Current pricing
@@ -56,13 +56,13 @@ Enter product codes in serial
 
 Now Enter new product codes
 ```bash
->>> ACDDC
+>>> ABCDABAA
 ```
 
 It will print total amount and will ask to enter new product codes or exit
 
 ```bash
-$9.0
+$32.4
 Enter new product codes
 Please enter 'exit' to exit this program
 >>> 
