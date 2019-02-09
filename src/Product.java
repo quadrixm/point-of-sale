@@ -1,4 +1,4 @@
 public class Product {
-    private String name;
-    private int amount;
+    public String name;
+    public int amount;
 }
