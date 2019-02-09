@@ -16,10 +16,10 @@ public class PointOfSaleService {
     }
 
     private ProductPrice getPricing(String productName) {
-        // Scanning existing set of product prices for given product name
-        for (ProductPrice price: productPrices) {
+        // Scanning existing set of product prices for given product code
+        for (ProductPrice price : productPrices) {
             // Finding product price in set
-            if (price.productName.equals(productName)) {
+            if (price.productCode.equals(productName)) {
                 // If found than return
                 return price;
             }
@@ -28,10 +28,10 @@ public class PointOfSaleService {
     }
 
     private Product getProduct(String productName) {
-        // Scanning existing set of products for given product name
-        for (Product product: products) {
+        // Scanning existing set of products for given product code
+        for (Product product : products) {
             // Finding product in set
-            if (product.name.equals(productName)) {
+            if (product.code.equals(productName)) {
                 // If found than return
                 return product;
             }
@@ -41,10 +41,10 @@ public class PointOfSaleService {
 
     public void setPricing(ProductPrice pricing) {
         Iterator<ProductPrice> iterator = productPrices.iterator();
-        // Remove any existing pricing for the given product name
+        // Remove any existing pricing for the given product code
         while (iterator.hasNext()) {
             ProductPrice price = iterator.next();
-            if (price.productName.equals(pricing.productName)) {
+            if (price.productCode.equals(pricing.productCode)) {
                 iterator.remove();
             }
         }
@@ -61,7 +61,7 @@ public class PointOfSaleService {
         } else {
             // If product not found in the list add a new product in the set
             product = new Product();
-            product.name = productName;
+            product.code = productName;
             product.amount = 1;
             products.add(product);
         }
@@ -71,16 +71,28 @@ public class PointOfSaleService {
 
         double totalAmount = 0.0;
 
-        for (Product product: products) {
-            ProductPrice price = getPricing(product.name);
+        for (Product product : products) {
+            // Getting price for the product
+            ProductPrice price = getPricing(product.code);
             if (price != null) {
-                if (price.bulkAmount > 0 && product.amount >= price.bulkAmount) {
-                    // TODO Calcualte bulk price
+                // Initializing product amount for per unit pricing
+                int productAmt4UnitPricing = product.amount;
+                // Initializing product amount for volume pricing
+                int productAmt4VolumePricing = 0;
+                if (price.volumeAmount > 0 && product.amount >= price.volumeAmount) {
+                    // If there is volume amoutn then updating per unit amount and volume amount for pricing
+                    productAmt4UnitPricing = product.amount % price.volumeAmount;
+                    productAmt4VolumePricing = (product.amount - productAmt4UnitPricing) / price.volumeAmount;
                 }
-                // TODO Calculate total
+                // Calculating all the price
+                totalAmount = totalAmount + (productAmt4UnitPricing * price.unitPrice) + (productAmt4VolumePricing * price.volumePrice);
             }
         }
 
         return totalAmount;
+    }
+
+    public void empty() {
+        products = new HashSet<>();
     }
 }
