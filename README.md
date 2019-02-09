@@ -1,14 +1,24 @@
 # point-of-sale scanning API
 
 
-## Building Application
+## Compiling Application
 
-### With gradle
+Go to the root directory and
 
-### Without gradle
+Run
 
+```bash
+$ javac src/*.java
+```
 
 ## Running Application
+
+Run
+
+```bash
+$ cd src/
+$ java Main
+```
 
 When the application starts, it will print the current default pricing.
 And will ask to continue with default pricing or add new pricing.
@@ -103,8 +113,9 @@ Please enter 'exit' to exit this program
 ```
 
 It will show you all existing pricing. 
-If you would like to add more pricing add in the given format.
-And when you are done enter `continue` with all added pricing.
+If you would like to add more pricing, add it in the given format.
+
+And when you are done, enter `continue` with all added pricing.
 
 
 
