@@ -1,0 +1,7 @@
+Input       Output
+-------------------
+ABCDABAA    $32.4
+CCCCCCC     $7.25
+ABCD        $15.4
+DDDDDDDD    $1.2
+ACAABA      $20.25
