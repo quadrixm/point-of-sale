@@ -34,6 +34,28 @@ public class App {
 
     public App run(String... args) {
 
+        // Setting pricing
+        ProductPrice priceForA = new ProductPrice();
+        priceForA.productCode = "A";
+        priceForA.unitPrice = 2.0;
+        priceForA.volumeAmount = 4;
+        priceForA.volumePrice = 7;
+        pointOfSaleService.setPricing(priceForA);
+        ProductPrice priceForB = new ProductPrice();
+        priceForB.productCode = "B";
+        priceForB.unitPrice = 12.0;
+        pointOfSaleService.setPricing(priceForB);
+        ProductPrice priceForC = new ProductPrice();
+        priceForC.productCode = "C";
+        priceForC.unitPrice = 1.25;
+        priceForC.volumeAmount = 6;
+        priceForC.volumePrice = 6;
+        pointOfSaleService.setPricing(priceForC);
+        ProductPrice priceForD = new ProductPrice();
+        priceForD.productCode = "D";
+        priceForD.unitPrice = 0.15;
+        pointOfSaleService.setPricing(priceForD);
+
         // Check if the it is interactive or not based on that it print $ at the beginning to take commands
         boolean cmdInput = false;
 
@@ -43,7 +65,10 @@ public class App {
         cmdInput = true;
 
         // Print initial $ for interactive shell
-        if (cmdInput) if (cmdInput) System.out.printf("$ ");
+        if (cmdInput) {
+            System.out.println("Enter product codes");
+            System.out.printf(">>> ");
+        }
 
         while (scanner.hasNext()) {
             String input = scanner.next();
@@ -51,9 +76,21 @@ public class App {
                 // Exit program
                 break;
             } else {
-                // TODO Process checkout
+
+                String[] productCodes = input.split("");
+
+                for (String productCode : productCodes) {
+                    pointOfSaleService.scan(productCode);
+                }
+
+                double totalAmount = pointOfSaleService.total();
+                System.out.println("$" + totalAmount);
+                pointOfSaleService.empty();
                 // Print initial $ for interactive shell
-                if (cmdInput) System.out.printf("$ ");
+                if (cmdInput) {
+                    System.out.println("Enter product codes");
+                    System.out.printf(">>> ");
+                }
             }
         }
 
