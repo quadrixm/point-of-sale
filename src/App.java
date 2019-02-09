@@ -34,62 +34,111 @@ public class App {
 
     public App run(String... args) {
 
-        // Setting pricing
-        ProductPrice priceForA = new ProductPrice();
-        priceForA.productCode = "A";
-        priceForA.unitPrice = 2.0;
-        priceForA.volumeAmount = 4;
-        priceForA.volumePrice = 7;
-        pointOfSaleService.setPricing(priceForA);
-        ProductPrice priceForB = new ProductPrice();
-        priceForB.productCode = "B";
-        priceForB.unitPrice = 12.0;
-        pointOfSaleService.setPricing(priceForB);
-        ProductPrice priceForC = new ProductPrice();
-        priceForC.productCode = "C";
-        priceForC.unitPrice = 1.25;
-        priceForC.volumeAmount = 6;
-        priceForC.volumePrice = 6;
-        pointOfSaleService.setPricing(priceForC);
-        ProductPrice priceForD = new ProductPrice();
-        priceForD.productCode = "D";
-        priceForD.unitPrice = 0.15;
-        pointOfSaleService.setPricing(priceForD);
+        boolean pricingIsSet = false;
+        boolean newPricing = false;
 
-        // Check if the it is interactive or not based on that it print $ at the beginning to take commands
-        boolean cmdInput = false;
+        String newPricingFormat = "Enter new Pricing in the format <Product Code> <Per Unit Price> <Volume Amount (Optional)> <Volume Price  (Optional)>";
+        String optionString = "Please enter 'continue' to continue with current pricing or 'new' to add new pricing";
+        String continueOptionString = "Please enter 'continue' to continue with current pricing";
+        String exitOptionString = "Please enter 'exit' to exit this program";
 
         // Using interactive shell
         Scanner scanner = new Scanner(System.in);
-        // Set interactive shell to true
-        cmdInput = true;
 
-        // Print initial $ for interactive shell
-        if (cmdInput) {
-            System.out.println("Enter product codes");
-            System.out.printf(">>> ");
+        // Setting default pricing
+        pointOfSaleService.setDefaultPricing();
+        System.out.println("Current pricing");
+        for (ProductPrice price: pointOfSaleService.getDefaultPricing()) {
+            String priceString = price.productCode + ":   $" + price.unitPrice + " each";
+            if (price.volumeAmount > 0) {
+                priceString += " or " + price.volumeAmount + " for $" + price.volumePrice;
+            }
+            System.out.println(priceString);
         }
+        System.out.println(optionString);
+        System.out.println(exitOptionString);
+        System.out.printf(">>> ");
 
         while (scanner.hasNext()) {
-            String input = scanner.next();
-            if (input.equals("exit")) {
+            String line = scanner.nextLine().trim();
+            if (line.equals("exit")) {
                 // Exit program
                 break;
-            } else {
+            } else if (line.equals("continue")) {
+                // Set default pricing and continue
+                pricingIsSet = true;
 
-                String[] productCodes = input.split("");
-
-                for (String productCode : productCodes) {
-                    pointOfSaleService.scan(productCode);
+                System.out.println("Current pricing");
+                for (ProductPrice price: pointOfSaleService.getDefaultPricing()) {
+                    String priceString = price.productCode + ":   $" + price.unitPrice + " each";
+                    if (price.volumeAmount > 0) {
+                        priceString += " or " + price.volumeAmount + " for $" + price.volumePrice;
+                    }
+                    System.out.println(priceString);
                 }
 
-                double totalAmount = pointOfSaleService.total();
-                System.out.println("$" + totalAmount);
-                pointOfSaleService.empty();
-                // Print initial $ for interactive shell
-                if (cmdInput) {
-                    System.out.println("Enter product codes");
+                System.out.println("Enter product codes in serial");
+                System.out.printf(">>> ");
+
+            }  else {
+                if (line.equals("new")) {
+                    // Set newPricing true and clearing the existing pricing
+                    newPricing = true;
+
+                    pointOfSaleService.clearPricing();
+
+                    System.out.println(newPricingFormat);
                     System.out.printf(">>> ");
+
+                } else {
+                    if (pricingIsSet) {
+                        String[] productCodes = line.split("");
+
+                        for (String productCode : productCodes) {
+                            pointOfSaleService.scan(productCode);
+                        }
+
+                        double totalAmount = pointOfSaleService.total();
+                        System.out.println("$" + totalAmount);
+                        pointOfSaleService.empty();
+                        // Print initial $ for interactive shell
+                        System.out.println("Enter new product codes");
+                        System.out.println(exitOptionString);
+                        System.out.printf(">>> ");
+                    } else if (newPricing) {
+                        String[] pricingArray = line.split(" ");
+                        ProductPrice newPrice = new ProductPrice();
+                        if (pricingArray.length >= 2) {
+                            newPrice.productCode = pricingArray[0];
+                            newPrice.unitPrice = Double.valueOf(pricingArray[1]);
+                            if (pricingArray.length >= 4) {
+                                newPrice.volumeAmount = Integer.valueOf(pricingArray[2]);
+                                newPrice.volumePrice = Double.valueOf(pricingArray[3]);
+                            }
+                            pointOfSaleService.setPricing(newPrice);
+                            System.out.println("Current pricing");
+                            for (ProductPrice price: pointOfSaleService.getDefaultPricing()) {
+                                String priceString = price.productCode + ":   $" + price.unitPrice + " each";
+                                if (price.volumeAmount > 0) {
+                                    priceString += " or " + price.volumeAmount + " for $" + price.volumePrice;
+                                }
+                                System.out.println(priceString);
+                            }
+                            System.out.println(newPricingFormat);
+                            System.out.println(continueOptionString);
+                            System.out.println(exitOptionString);
+                            System.out.printf(">>> ");
+                        } else {
+                            System.out.println("Invalid format for pricing");
+                            System.out.println(newPricingFormat);
+                            System.out.printf(">>> ");
+                        }
+                    } else {
+                        System.out.println("Enter valid option");
+                        System.out.println(optionString);
+                        System.out.println(exitOptionString);
+                        System.out.printf(">>> ");
+                    }
                 }
             }
         }

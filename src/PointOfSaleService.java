@@ -5,10 +5,10 @@ import java.util.Set;
 public class PointOfSaleService {
 
     // Store all the pricing
-    private static Set<ProductPrice> productPrices;
+    private Set<ProductPrice> productPrices;
 
     // Store all the products
-    private static Set<Product> products;
+    private Set<Product> products;
 
     PointOfSaleService() {
         productPrices = new HashSet<>();
@@ -94,5 +94,37 @@ public class PointOfSaleService {
 
     public void empty() {
         products = new HashSet<>();
+    }
+
+    public void setDefaultPricing() {
+        // Setting pricing
+        ProductPrice priceForA = new ProductPrice();
+        priceForA.productCode = "A";
+        priceForA.unitPrice = 2.0;
+        priceForA.volumeAmount = 4;
+        priceForA.volumePrice = 7;
+        setPricing(priceForA);
+        ProductPrice priceForB = new ProductPrice();
+        priceForB.productCode = "B";
+        priceForB.unitPrice = 12.0;
+        setPricing(priceForB);
+        ProductPrice priceForC = new ProductPrice();
+        priceForC.productCode = "C";
+        priceForC.unitPrice = 1.25;
+        priceForC.volumeAmount = 6;
+        priceForC.volumePrice = 6;
+        setPricing(priceForC);
+        ProductPrice priceForD = new ProductPrice();
+        priceForD.productCode = "D";
+        priceForD.unitPrice = 0.15;
+        setPricing(priceForD);
+    }
+
+    public Set<ProductPrice> getDefaultPricing() {
+        return productPrices;
+    }
+
+    public void clearPricing() {
+        productPrices = new HashSet<>();
     }
 }
