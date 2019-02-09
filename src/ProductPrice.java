@@ -1,6 +1,6 @@
 public class ProductPrice {
-    public String productName;
-    public double price;
-    public int bulkAmount;
-    public double bulkPrice;
+    public String productCode;
+    public double unitPrice;
+    public int volumeAmount;
+    public double volumePrice;
 }
