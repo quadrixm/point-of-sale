@@ -1,17 +1,17 @@
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PointOfSaleService {
 
     // Store all the pricing
-    private static List<ProductPrice> productPrices;
+    private static Set<ProductPrice> productPrices;
 
     // Store all the products
-    private static List<Product> products;
+    private static Set<Product> products;
 
     PointOfSaleService() {
-        productPrices = new LinkedList();
-        products = new LinkedList();
+        productPrices = new HashSet<>();
+        products = new HashSet<>();
     }
 
     public void setPricing(ProductPrice pricing) {

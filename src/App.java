@@ -27,8 +27,7 @@ public class App {
     public static App run(Class<?> primarySource, String... args) {
 
         // Getting the instance of the service
-
-        // Parking lot to store all the slots
+        pointOfSaleService = new PointOfSaleService();
 
         return new App(primarySource).run(args);
     }
